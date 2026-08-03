@@ -1,0 +1,45 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+#controles {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+}
+#comandos {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+}
+
+table {
+    width: 80vw;
+    height: 80vh;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+tr {
+    height: calc(80vh / var(--linhas, 10));
+}
+
+td {
+    border: 1px solid black;
+    text-align: center;
+    vertical-align: middle;
+    overflow: hidden;
+}
+
+
+td img {
+    width: 50%;
+    height: 50%;
+    object-fit: contain;
+}

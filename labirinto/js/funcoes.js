@@ -1,8 +1,9 @@
 const corpo = document.getElementById("tabela");
 const cao=new Image();
-cao.src="img/cao.png";
+cao.src="img/gato.png";
 const casa=new Image();
-casa.src="img/casinha.png";
+casa.src="img/caixa.png";
+
 const l=10;
 const c=10;
 let vetComandos=[];
@@ -52,8 +53,9 @@ function inserirComandos(){
 const esperar= (ms) => new Promise(resolve => setTimeout(resolve,ms));
 
 async function seguirCaminho(){
-    
     for(let i=0; i<vetComandos.length; i++){
+        let linhaPata=linhaAtual;
+        let colunaPata=colunaAtual;
         let x=parseInt(vetComandos[i])
         switch(x){
             case 1:
@@ -70,15 +72,15 @@ async function seguirCaminho(){
                 
             }
         document.getElementById(linhaAtual+","+colunaAtual).appendChild(cao);
+        document.getElementById(linhaPata+","+colunaPata).innerHTML="<img src='img/pata.webp'>"
         await esperar(500);
     }
     // apaga o vetor acumulado dos comandos da tela
     vetComandos=[] 
     document.getElementById("comandos").innerHTML=" "
     if(linhaAtual==casaLinha && colunaAtual==casaColuna){
-        document.getElementById("parabens").innerHTML="Parabéns, o cachorro chegou na casinha!"
+        document.getElementById("parabens").innerHTML="Parabéns, o gato chegou na caixa!"
     }
 }
-// fazer uma verificação se ele chegou na casinha e dar parabens
 criarTabela();
 posicionarImagens();

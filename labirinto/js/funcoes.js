@@ -7,14 +7,17 @@ casa.src="img/caixa.png";
 const l=10;
 const c=10;
 let vetComandos=[];
+const esperar= (ms) => new Promise(resolve => setTimeout(resolve,ms));
+
 let caoLinha= Math.floor(Math.random() * (l/2 - 0 + 1)) + 0;
 let caoColuna = Math.floor(Math.random() * ((c-1) - 0 + 1)) + 0;
 let casaLinha= Math.floor(Math.random() * ((l-1) - l/2 + 1)) + l/2;
 let casaColuna = Math.floor(Math.random() * ((c-1) - 0 + 1)) + 0;
-
-// pegar a posiçao do cachorro pra alterar em caminhar
 let linhaAtual=caoLinha;
 let colunaAtual=caoColuna;
+let passo=0;
+let botao=document.getElementById("vizinho");
+
 
 function criarTabela(){
    const tabela = document.createElement("table");
@@ -35,52 +38,87 @@ function posicionarImagens(){
     document.getElementById(caoLinha+","+caoColuna).appendChild(cao);
     document.getElementById(casaLinha+","+casaColuna).appendChild(casa);
 }
-function inserirComandos(){
-  const e=document.getElementById("evento").value;
-  const d=document.getElementById("direcao").value;
-  const c=document.getElementById("casas").value;
-    if (!e || !d || !c){
-        alert("Por favor, preencha todas informações");
-        return;
-    }
-  const cmd=document.getElementById("comandos");
-  for(let i=0;i<c;i++){
-      cmd.innerHTML+=d+",";
-      vetComandos.push(d);
-  }
 
-}
-const esperar= (ms) => new Promise(resolve => setTimeout(resolve,ms));
 
 async function seguirCaminho(){
-    for(let i=0; i<vetComandos.length; i++){
-        let linhaPata=linhaAtual;
-        let colunaPata=colunaAtual;
-        let x=parseInt(vetComandos[i])
-        switch(x){
-            case 1:
-                linhaAtual-=1;
-                break;
-            case 2:
-                linhaAtual+=1;
-                break;
-            case 3:
-                colunaAtual+=1;
-                break;
-            case 4:
-                colunaAtual-=1;
-                
-            }
-        document.getElementById(linhaAtual+","+colunaAtual).appendChild(cao);
-        document.getElementById(linhaPata+","+colunaPata).innerHTML="<img src='img/pata.webp'>"
-        await esperar(500);
+    for(let comando of vetComandos){
+        // direçao
+        let dir=comando[1];
+        // maximo de passos tem que dar
+        let iMax=comando[2] ;
+        if(comando[0]==1){
+            passo=1;
+        }else{
+            passo=comando[2];
+            iMax=1;
+        }
+
+    
+        for(let i=0; i<iMax;i++){
+        // 
+            switch(dir){
+                case 1:
+                    linhaAtual-=passo;
+                    break;
+                case 2:
+                    linhaAtual+=passo;
+                    break;
+                case 3:
+                    colunaAtual+=passo;
+                    break;
+                case 4:
+                    colunaAtual-=passo;
+                    
+                }
+            document.getElementById(linhaAtual+","+colunaAtual).appendChild(cao);
+            await esperar(1000);
+        }
     }
     // apaga o vetor acumulado dos comandos da tela
     vetComandos=[] 
-    document.getElementById("comandos").innerHTML=" "
+    
     if(linhaAtual==casaLinha && colunaAtual==casaColuna){
         document.getElementById("parabens").innerHTML="Parabéns, o gato chegou na caixa!"
     }
 }
+function inserirComandos(){
+    const e=parseInt(document.getElementById("evento").value);
+    const d=parseInt(document.getElementById("direcao").value);
+    const c=parseInt(document.getElementById("casas").value);
+
+    if (!e || !d || !c ){
+        alert("Por favor, preencha todas informações");
+        return;
+    }
+    const cmd=document.getElementById("comandos");
+    vetComandos.push([e,d,c]);
+    
+
+}
+// reconhecer os vizinhos do gato, calcula a distancia da caixa de todos e o que for menor ele executa
+function vizinhanca(){
+    let x=caoColuna;
+    let y=caoLinha;
+    let x1=casaColuna;
+    let y1=casaLinha;
+    let vetVizinhos=[
+        [x,y-1],
+        [x+1,y-1],
+        [x+1,y],
+        [x+1,y+1],
+        [x,y+1],
+        [x-1,y+1],
+        [x-1,y],
+        [x-1,y-1] ];
+    for(let i=0;i<vetVizinhos.length;i++){
+        [x,y]=vetVizinhos[i];
+        let dist=Math.sqrt((x1-x)**2+(y1-y)**2);
+        document.getElementById(y+","+x).innerHTML=dist;
+    }
+}
+
 criarTabela();
 posicionarImagens();
+botao.addEventListener("click", vizinhanca);
+    
+

@@ -1,9 +1,7 @@
-
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
     <title>Labirinto</title>
-    <!-- defer significa chamar o script so depois de carregar o HTML, se nao tiver essa tag, ele pode gerar erro ao interagir com uma imagem que ainda nao carregou -->
     <script src="js/funcoes.js" defer></script>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
@@ -11,17 +9,21 @@
 <div id="controles">
      <select name="evento" id="evento">
          <option value="" disabled selected hidden>Evento</option>
-         <option>Pular para</option><option>Ir para</option><option>Desviar para</option>
+         <option value="1">Ir para</option>
+         <option value="2">Pular para</option>
      </select>
      <select name="direcao" id="direcao">
          <option value="" disabled selected hidden>Direção</option>
-         <option value="1">Acima</option><option value="2">Abaixo</option><option value="3">Direita</option><option value="4">Esquerda</option>
+         <option value="1">Acima</option>
+         <option value="2">Abaixo</option>
+         <option value="3">Direita</option>
+         <option value="4">Esquerda</option>
      </select>
      <input type="number" name="casas" id="casas" placeholder="Casas" style="width: 60px;">
     <button onclick="inserirComandos()" id="casas">Incluir</button>
     <button onclick="seguirCaminho()" id="casas">Executar</button>
+    <button  id="vizinho">Vizinhança</button>
 </div>
-<!-- div para parabenizar -->
 <div id="parabens"></div>
 <div id="comandos"></div>
 <div id="tabela"></div>

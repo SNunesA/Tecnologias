@@ -101,6 +101,8 @@ function vizinhanca(){
     let y=caoLinha;
     let x1=casaColuna;
     let y1=casaLinha;
+// otimizar para verificar no vetor
+
     let vetVizinhos=[
         [x,y-1],
         [x+1,y-1],
@@ -110,11 +112,27 @@ function vizinhanca(){
         [x-1,y+1],
         [x-1,y],
         [x-1,y-1] ];
+
+    
+    let menordist=10000
     for(let i=0;i<vetVizinhos.length;i++){
         [x,y]=vetVizinhos[i];
-        let dist=Math.sqrt((x1-x)**2+(y1-y)**2);
-        document.getElementById(y+","+x).innerHTML=dist;
+        let v=document.getElementById((y+","+x));
+        // esse if serve para verificar quando o gato estiver nos cantos
+        if(v){
+            let dist=Math.sqrt((x1-x)**2+(y1-y)**2);
+            v.innerHTML=dist;
+            if (dist<menordist){
+                menordist=dist
+                posi=v
+            }
+        }
+        
     }
+    console.log(posi)
+    // document.getElementById(posi).appendChild(cao);
+
+    // tem que fazer ele se mover pra menor posição em um loop ate a distancia ser zero 
 }
 
 criarTabela();

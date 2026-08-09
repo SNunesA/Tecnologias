@@ -20,19 +20,19 @@ let botao=document.getElementById("vizinho");
 
 
 function criarTabela(){
-   const tabela = document.createElement("table");
+    const tabela = document.createElement("table");
     tabela.style.setProperty("--linhas", l);
-   for(let i=0;i<l;i++){
-       const linha=document.createElement("tr");
-       for(let j=0;j<c;j++){
-           const coluna = document.createElement("td");
-           coluna.setAttribute("id",i+","+j);
-           linha.appendChild(coluna);
-       }
-
-       tabela.appendChild(linha);
-   }
-   corpo.appendChild(tabela);
+    for(let i=0;i<l;i++){
+        const linha=document.createElement("tr");
+        for(let j=0;j<c;j++){
+            const coluna = document.createElement("td");
+            coluna.setAttribute("id",i+","+j);
+            linha.appendChild(coluna);
+        }
+        
+        tabela.appendChild(linha);
+    }
+    corpo.appendChild(tabela);
 }
 function posicionarImagens(){
     document.getElementById(caoLinha+","+caoColuna).appendChild(cao);
@@ -97,11 +97,13 @@ function inserirComandos(){
 }
 // reconhecer os vizinhos do gato, calcula a distancia da caixa de todos e o que for menor ele executa
 function vizinhanca(){
-    let x=caoColuna;
-    let y=caoLinha;
+    let x=colunaAtual;
+    let y=linhaAtual;
     let x1=casaColuna;
     let y1=casaLinha;
-// otimizar para verificar no vetor
+
+    let aux = c+l; //c numero de colunas
+    let vetAux = [];
 
     let vetVizinhos=[
         [x,y-1],
@@ -114,25 +116,30 @@ function vizinhanca(){
         [x-1,y-1] ];
 
     
-    let menordist=10000
+    
     for(let i=0;i<vetVizinhos.length;i++){
         [x,y]=vetVizinhos[i];
         let v=document.getElementById((y+","+x));
         // esse if serve para verificar quando o gato estiver nos cantos
         if(v){
             let dist=Math.sqrt((x1-x)**2+(y1-y)**2);
-            v.innerHTML=dist;
-            if (dist<menordist){
-                menordist=dist
-                posi=v
+            v.innerHTML+=dist;
+            if(dist<aux){
+                aux=dist;
+                vetAux=[x,y];
             }
         }
         
     }
-    console.log(posi)
-    // document.getElementById(posi).appendChild(cao);
-
     // tem que fazer ele se mover pra menor posição em um loop ate a distancia ser zero 
+    let mover = document.getElementById("mover").addEventListener("click", () => {
+        colunaAtual=vetAux[0];
+        linhaAtual=vetAux[1];
+        document.getElementById(linhaAtual+","+colunaAtual).appendChild(cao);
+        if(linhaAtual==casaLinha && colunaAtual==casaColuna){
+            document.getElementById("parabens").innerHTML="Parabéns, o gato chegou na caixa!"
+        }
+    });
 }
 
 criarTabela();

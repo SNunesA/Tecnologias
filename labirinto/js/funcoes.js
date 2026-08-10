@@ -17,6 +17,9 @@ let linhaAtual=caoLinha;
 let colunaAtual=caoColuna;
 let passo=0;
 let botao=document.getElementById("vizinho");
+// pata
+let linhaPata=linhaAtual;
+let colunaPata=colunaAtual;
 
 
 function criarTabela(){
@@ -55,7 +58,8 @@ async function seguirCaminho(){
 
     
         for(let i=0; i<iMax;i++){
-        // 
+            linhaPata=linhaAtual;
+            colunaPata=colunaAtual;
             switch(dir){
                 case 1:
                     linhaAtual-=passo;
@@ -71,6 +75,7 @@ async function seguirCaminho(){
                     
                 }
             document.getElementById(linhaAtual+","+colunaAtual).appendChild(cao);
+            document.getElementById(linhaPata+","+colunaPata).innerHTML="<img src='/img/pata.png'>";
             await esperar(1000);
         }
     }
@@ -96,50 +101,54 @@ function inserirComandos(){
 
 }
 // reconhecer os vizinhos do gato, calcula a distancia da caixa de todos e o que for menor ele executa
-function vizinhanca(){
-    let x=colunaAtual;
-    let y=linhaAtual;
-    let x1=casaColuna;
-    let y1=casaLinha;
+async function vizinhanca(){
+    while(linhaAtual!=casaLinha || colunaAtual!=casaColuna){
+        let x=colunaAtual;
+        let y=linhaAtual;
+        let x1=casaColuna;
+        let y1=casaLinha;
 
-    let aux = c+l; //c numero de colunas
-    let vetAux = [];
+        let aux = c+l; //c numero de colunas
+        let vetAux = [];
 
-    let vetVizinhos=[
-        [x,y-1],
-        [x+1,y-1],
-        [x+1,y],
-        [x+1,y+1],
-        [x,y+1],
-        [x-1,y+1],
-        [x-1,y],
-        [x-1,y-1] ];
+        let vetVizinhos=[
+            [x,y-1],
+            [x+1,y-1],
+            [x+1,y],
+            [x+1,y+1],
+            [x,y+1],
+            [x-1,y+1],
+            [x-1,y],
+            [x-1,y-1] ];
 
-    
-    
-    for(let i=0;i<vetVizinhos.length;i++){
-        [x,y]=vetVizinhos[i];
-        let v=document.getElementById((y+","+x));
-        // esse if serve para verificar quando o gato estiver nos cantos
-        if(v){
-            let dist=Math.sqrt((x1-x)**2+(y1-y)**2);
-            v.innerHTML+=dist;
-            if(dist<aux){
-                aux=dist;
-                vetAux=[x,y];
+        for(let i=0;i<vetVizinhos.length;i++){
+            [x,y]=vetVizinhos[i];
+            let v=document.getElementById((y+","+x));
+            // esse if serve para verificar quando o gato estiver nos cantos
+            if(v){
+                let dist=Math.sqrt((x1-x)**2+(y1-y)**2);
+                // v.innerHTML+=dist;
+                if(dist<aux){
+                    aux=dist;
+                    vetAux=[x,y];
+                }
             }
+            
         }
-        
-    }
-    // tem que fazer ele se mover pra menor posição em um loop ate a distancia ser zero 
-    let mover = document.getElementById("mover").addEventListener("click", () => {
+
+        linhaPata=linhaAtual;
+        colunaPata=colunaAtual;
         colunaAtual=vetAux[0];
         linhaAtual=vetAux[1];
         document.getElementById(linhaAtual+","+colunaAtual).appendChild(cao);
-        if(linhaAtual==casaLinha && colunaAtual==casaColuna){
-            document.getElementById("parabens").innerHTML="Parabéns, o gato chegou na caixa!"
-        }
-    });
+        document.getElementById(linhaPata+","+colunaPata).innerHTML="<img src='/img/pata.png'>";
+        await esperar(500);
+
+    }
+    
+    document.getElementById("parabens").innerHTML="Parabéns, o gato chegou na caixa!"
+    
+   
 }
 
 criarTabela();

@@ -21,6 +21,7 @@ let botao=document.getElementById("vizinho");
 let linhaPata=linhaAtual;
 let colunaPata=colunaAtual;
 
+let obs=new Image();
 
 function criarTabela(){
     const tabela = document.createElement("table");
@@ -40,6 +41,27 @@ function criarTabela(){
 function posicionarImagens(){
     document.getElementById(caoLinha+","+caoColuna).appendChild(cao);
     document.getElementById(casaLinha+","+casaColuna).appendChild(casa);
+
+    
+    for(let i=0;i<10;i++){
+        let obs=new Image();
+        num=Math.floor(Math.random() *3)+1;
+        switch(num){
+            case 1:
+               
+                obs.src="img/cacto.png";
+                break;
+            case 2:
+                obs.src="img/aspirador.png";
+                break;
+            case 3:
+                obs.src="img/agua.png";
+        }
+        let linhaObs=Math.floor(Math.random() * (l/2 - 0 + 1)) + 0;
+        let colunaObs=Math.floor(Math.random() * ((c-1) - 0 + 1)) + 0;
+        document.getElementById(linhaObs+","+colunaObs).appendChild(obs);
+
+    }
 }
 
 

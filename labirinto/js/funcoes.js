@@ -175,7 +175,7 @@ async function vizinhanca(){
    
 }
     */
-
+// nao usar o codigo do prof abaixo
 const corpo = document.getElementById("tabela");
 const cao=new Image();
 cao.src="img/gato.png";
@@ -329,7 +329,7 @@ function inserirComandos(){
       vetComandos.push([e,d,c]);
 }
       */
-    //  nao usar o codigo do prof
+    //  nao usar o codigo do prof acima
 criarTabela();
 posicionarImagens();
 
@@ -343,7 +343,8 @@ function eValido(x,y){
     if(x<0 || x>=l || y<0 || y>=c) return false;
     let celula= document.getElementById(x+","+y);
     if(!celula) return false;
-    return celula.querySelector('img')?.className!=="obs";
+    // return celula.querySelector('img')?.className!=="obs";
+    return celula.querySelector('img')?.className!=="buraco";
 }
 // ponteiro fake, lista encadeada
 function criaNo(x,y,g,h,pai=null){
@@ -391,8 +392,45 @@ async function encontraCaminhoEstrela(){
             let vizinhoX=noAtual.x+dx;
             let vizinhoY=noAtual.y+dy;
             if(!eValido(vizinhoX,vizinhoY))continue;
+            let jaFechado=listaFechada.some(n=>n.x===vizinhoX && n.y===vizinhoY);
+            if(jaFechado)continue;
+            let custoPasso=Math.sqrt(dx*dx+dy*dy);
+            let gVizinho=noAtual.g+custoPasso;
+            let hVizinho=calcularHeuristica(vizinhoX,vizinhoY,fimX,fimY);
+            // noaberta recebe o elemento html inteiro
+            let noAberta=listaAberta.find((n)=>n.x===vizinhoX && n.y===vizinhoY);
+            if(!noAberta){
+                let novoNo=criaNo(vizinhoX,vizinhoY,gVizinho,hVizinho,noAtual);
+                listaAberta.push(novoNo);
+                // verificando se for menor ele salva
+            }else if(gVizinho<noAberta.g){
+                noAberta.g=gVizinho;
+                noAberta.f=gVizinho+noAberta.h;
+                noAberta.pai=noAtual;
+
+            }
         }
     }
+    console.log("nao encontrou casa");
+}
+// faz o gato percorrer o caminho que o drone traçou
+async function animarCao(caminho) {
+    for(let no of caminho){
+        let celula=document.getElementById(no.x+","+no.y);
+        celula.appendChild(cao);
+        await esperar(500);
+    }
+    console.log("chegou na caixa");
+}
+function reconstruirCaminho(noFinal){
+    let caminho=[];
+    let atual=noFinal;
+    while(atual != null){
+        caminho.push(atual);
+        atual=atual.pai;
+
+    }
+    return caminho.reverse();
 }
 /*
 criarTabela();

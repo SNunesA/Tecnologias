@@ -179,7 +179,8 @@ function inserirComandos(){
                 seta.style.transform = "rotate(90deg)";
                 break;
             case 4:
-                seta.style.transform = "rotate(270deg)";
+                
+                seta.style.transform= "rotate(270deg) scaleX(-1)";
 
         }
         cmd.appendChild(seta);

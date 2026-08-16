@@ -19,8 +19,8 @@ let colunaAtual=caoColuna;
 let passo=0;
 let botao=document.getElementById("vizinho");
 // pata
-let linhaPata=linhaAtual;
-let colunaPata=colunaAtual;
+let linhaPata;
+let colunaPata;
 
 let obs=new Image();
 
@@ -43,14 +43,15 @@ function posicionarImagens(){
     document.getElementById(caoLinha+","+caoColuna).appendChild(cao);
     document.getElementById(casaLinha+","+casaColuna).appendChild(casa);
 
-    
+    let vetObs=[]
+    let linhaObs=0
+    let colunaObs=0
     for(let i=0;i<10;i++){
         let obs=new Image();
         obs.className="obs";
         num=Math.floor(Math.random() *3)+1;
         switch(num){
             case 1:
-               
                 obs.src="img/cacto.png";
                 break;
             case 2:
@@ -59,14 +60,26 @@ function posicionarImagens(){
             case 3:
                 obs.src="img/agua.png";
         }
-        let linhaObs=Math.floor(Math.random() * (l/2 - 0 + 1)) + 0;
-        let colunaObs=Math.floor(Math.random() * ((c-1) - 0 + 1)) + 0;
+        
+        g=caoLinha+","+caoColuna;
+        x=casaLinha+","+casaColuna;
+        
+        do {
+            linhaObs=Math.floor(Math.random() * ((l-1) - 0 + 1)) + 0;
+            colunaObs=Math.floor(Math.random() * ((c-1) - 0 + 1)) + 0;
+            celula=linhaObs+","+colunaObs;
+        } while (vetObs.includes(celula) || celula == g || celula == x);
+        vetObs.push(linhaObs+","+colunaObs);
+        
         document.getElementById(linhaObs+","+colunaObs).appendChild(obs);
-
     }
 }
 
-
+function apagaVetor(){
+    // apaga o vetor acumulado dos comandos da tela
+    vetComandos=[];
+    document.getElementById("comandos").innerHTML="";
+}
 async function seguirCaminho(){
     for(let comando of vetComandos){
         // direçao
@@ -80,35 +93,49 @@ async function seguirCaminho(){
             iMax=1;
         }
 
-    
+        let auxL;
+        let auxC;
         for(let i=0; i<iMax;i++){
             linhaPata=linhaAtual;
             colunaPata=colunaAtual;
             switch(dir){
                 case 1:
-                    linhaAtual-=passo;
+                    auxL=linhaAtual-passo;
+                    auxC=colunaAtual;
                     break;
                 case 2:
-                    linhaAtual+=passo;
+                    auxL=linhaAtual+passo;
+                    auxC=colunaAtual;
                     break;
                 case 3:
-                    colunaAtual+=passo;
+                    auxL=linhaAtual;
+                    auxC=colunaAtual+passo;
                     break;
                 case 4:
-                    colunaAtual-=passo;
+                    auxL=linhaAtual;
+                    auxC=colunaAtual-passo;
                     
                 }
+            
+            let celula= document.getElementById(auxL+","+auxC);
+
+            if(celula.querySelector('img')?.className=="obs"){
+                console.log("obstaculo");
+                apagaVetor();
+                return;
+            }
+            linhaAtual=auxL;
+            colunaAtual=auxC;
             document.getElementById(linhaAtual+","+colunaAtual).appendChild(cao);
             document.getElementById(linhaPata+","+colunaPata).innerHTML="<img src='img/pata.png'>";
             await esperar(1000);
+            if(linhaAtual==casaLinha && colunaAtual==casaColuna){
+                document.getElementById("parabens").innerHTML="Parabéns, o gato chegou na caixa!";
+                return;
+            }
         }
     }
-    // apaga o vetor acumulado dos comandos da tela
-    vetComandos=[] 
-    
-    if(linhaAtual==casaLinha && colunaAtual==casaColuna){
-        document.getElementById("parabens").innerHTML="Parabéns, o gato chegou na caixa!"
-    }
+    apagaVetor();
 }
 
 

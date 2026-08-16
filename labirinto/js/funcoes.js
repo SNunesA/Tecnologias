@@ -87,6 +87,7 @@ async function seguirCaminho(){
         let dir=comando[1];
         // maximo de passos tem que dar
         let iMax=comando[2] ;
+        let celula;
         if(comando[0]==1){
             passo=1;
         }else{
@@ -118,7 +119,12 @@ async function seguirCaminho(){
                     
                 }
             
-            let celula= document.getElementById(auxL+","+auxC);
+            if (auxL < 0 || auxL >= l || auxC < 0 || auxC >= c) {
+                console.log("Tentou sair da tabela");
+                apagaVetor();
+                return;
+             }
+            let celula = document.getElementById(auxL + "," + auxC);
 // o personagem desvie para para conseguir chegar no objetivo
             if(celula.querySelector('img')?.className=="obs"){
                 console.log("obstaculo");
@@ -170,6 +176,7 @@ function inserirComandos(){
                 break;
             case 4:
                 seta.style.transform = "rotate(270deg)";
+
         }
         cmd.appendChild(seta);
         
@@ -239,7 +246,7 @@ posicionarImagens();
 botao.addEventListener("click", vizinhanca);
  
 // estrela
-let posCao=document.getElementById(caoLinha+","+caoColuna);
+let posCao=document.getElementById(linhaAtual+","+colunaAtual);
 let posCasa=document.getElementById(casaLinha+","+casaColuna);
 // mesma funçao do vizinhança mas otimizado
 function calcularHeuristica(x1,y1,x2,y2){
@@ -279,7 +286,7 @@ async function encontraCaminhoEstrela(){
         let noAtual=listaAberta.shift();
         // if pra verificar se ja chegou na casinha
         if(noAtual.x===fimX && noAtual.y===fimY){
-            console.log("Chegou ao destino");
+            
             let caminhoFinal= reconstruirCaminho(noAtual);
             await animarCao(caminhoFinal);
             return;
@@ -327,7 +334,7 @@ async function animarCao(caminho) {
         celula.appendChild(cao);
         await esperar(500);
     }
-    console.log("chegou na caixa");
+    document.getElementById("parabens").innerHTML="Parabéns, o gato chegou na caixa!"
 }
 function reconstruirCaminho(noFinal){
     let caminho=[];

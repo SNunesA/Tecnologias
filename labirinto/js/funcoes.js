@@ -63,7 +63,7 @@ function posicionarImagens(){
         
         g=caoLinha+","+caoColuna;
         x=casaLinha+","+casaColuna;
-        
+        // inclua imagens de obstáculos ( em posições aleatórias e que não coincidam umas com as outras nem com os personagens
         do {
             linhaObs=Math.floor(Math.random() * ((l-1) - 0 + 1)) + 0;
             colunaObs=Math.floor(Math.random() * ((c-1) - 0 + 1)) + 0;
@@ -80,6 +80,7 @@ function apagaVetor(){
     vetComandos=[];
     document.getElementById("comandos").innerHTML="";
 }
+// essa alteração deve ser aplicada apenas a parte do algoritmo que faz o percurso usando os comandos que foram fornecidos pelo usuário
 async function seguirCaminho(){
     for(let comando of vetComandos){
         // direçao
@@ -118,7 +119,7 @@ async function seguirCaminho(){
                 }
             
             let celula= document.getElementById(auxL+","+auxC);
-
+// o personagem desvie para para conseguir chegar no objetivo
             if(celula.querySelector('img')?.className=="obs"){
                 console.log("obstaculo");
                 apagaVetor();
@@ -156,7 +157,7 @@ function inserirComandos(){
         case 2:
             nome="pulo"        
     }
-    
+    // cada vez que incluir um comando (evento, direção e casas) ele deve ser mostrado com figuras
     for(let i=0;i<c;i++){
         let seta = new Image();
         seta.src = "img/" + nome + ".png";
@@ -237,3 +238,104 @@ criarTabela();
 posicionarImagens();
 botao.addEventListener("click", vizinhanca);
  
+// estrela
+let posCao=document.getElementById(caoLinha+","+caoColuna);
+let posCasa=document.getElementById(casaLinha+","+casaColuna);
+// mesma funçao do vizinhança mas otimizado
+function calcularHeuristica(x1,y1,x2,y2){
+    // calcula uma linha reta entre dois pontos em um plano cartesiano, o H da formula
+    return Math.sqrt((x2-x1)**2+(y2-y1)**2);
+}
+function eValido(x,y){
+    // se estiver fora da tabela ou nao existir
+    if(x<0 || x>=l || y<0 || y>=c) return false;
+    let celula= document.getElementById(x+","+y);
+    if(!celula) return false;
+    return celula.querySelector('img')?.className!=="obs";
+}
+// ponteiro fake, lista encadeada
+function criaNo(x,y,g,h,pai=null){
+    return{
+        x:x,
+        y:y,
+        g:g,
+        h:h,
+        f:g+h,
+        pai:pai
+    }
+}
+async function encontraCaminhoEstrela(){
+    let[inicioX,inicioY]=posCao.id.split(",").map(Number);
+    let[fimX,fimY]=posCasa.id.split(",").map(Number);
+    let listaAberta=[];
+    let listaFechada=[];
+    let hInicial=calcularHeuristica(inicioX,inicioY,fimX,fimY);
+    let noInicial=criaNo(inicioX,inicioY,0,hInicial,null);
+    listaAberta.push(noInicial);
+    while(listaAberta.length>0){
+        // ordena parecido com o buble sort
+        listaAberta.sort((a,b)=>a.f-b.f);
+        // shift tira o primeiro elemento da pilha
+        let noAtual=listaAberta.shift();
+        // if pra verificar se ja chegou na casinha
+        if(noAtual.x===fimX && noAtual.y===fimY){
+            console.log("Chegou ao destino");
+            let caminhoFinal= reconstruirCaminho(noAtual);
+            await animarCao(caminhoFinal);
+            return;
+        }
+        listaFechada.push(noAtual);
+        let direcoes=[
+            [0,-1],
+            [1,-1],
+            [1,0],
+            [1,1],
+            [0,1],
+            [-1,1],
+            [-1,0],
+            [-1,-1]
+        ]
+        for(let [dx,dy] of direcoes){
+            let vizinhoX=noAtual.x+dx;
+            let vizinhoY=noAtual.y+dy;
+            if(!eValido(vizinhoX,vizinhoY))continue;
+            let jaFechado=listaFechada.some(n=>n.x===vizinhoX && n.y===vizinhoY);
+            if(jaFechado)continue;
+            let custoPasso=Math.sqrt(dx*dx+dy*dy);
+            let gVizinho=noAtual.g+custoPasso;
+            let hVizinho=calcularHeuristica(vizinhoX,vizinhoY,fimX,fimY);
+            // noaberta recebe o elemento html inteiro
+            let noAberta=listaAberta.find((n)=>n.x===vizinhoX && n.y===vizinhoY);
+            if(!noAberta){
+                let novoNo=criaNo(vizinhoX,vizinhoY,gVizinho,hVizinho,noAtual);
+                listaAberta.push(novoNo);
+                // verificando se for menor ele salva
+            }else if(gVizinho<noAberta.g){
+                noAberta.g=gVizinho;
+                noAberta.f=gVizinho+noAberta.h;
+                noAberta.pai=noAtual;
+
+            }
+        }
+    }
+    console.log("nao encontrou casa");
+}
+// faz o gato percorrer o caminho que o drone traçou
+async function animarCao(caminho) {
+    for(let no of caminho){
+        let celula=document.getElementById(no.x+","+no.y);
+        celula.appendChild(cao);
+        await esperar(500);
+    }
+    console.log("chegou na caixa");
+}
+function reconstruirCaminho(noFinal){
+    let caminho=[];
+    let atual=noFinal;
+    while(atual != null){
+        caminho.push(atual);
+        atual=atual.pai;
+
+    }
+    return caminho.reverse();
+}

@@ -82,6 +82,8 @@ function apagaVetor(){
 }
 // essa alteração deve ser aplicada apenas a parte do algoritmo que faz o percurso usando os comandos que foram fornecidos pelo usuário
 async function seguirCaminho(){
+    document.getElementById("incluir").disabled = true;
+    document.getElementById("executar").disabled = true;
     for(let comando of vetComandos){
         // direçao
         let dir=comando[1];
@@ -143,6 +145,8 @@ async function seguirCaminho(){
         }
     }
     apagaVetor();
+    document.getElementById("incluir").disabled = false;
+    document.getElementById("executar").disabled = false;
 }
 
 

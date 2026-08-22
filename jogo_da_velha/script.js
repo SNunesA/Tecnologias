@@ -29,12 +29,13 @@ function clicarCelula(evento){
         jogoAtivo=false;
         return;
     }
-    elementoStatus.textContent="vez a ia";
+    elementoStatus.textContent="vez da ia";
     jogarIA();
 }
 
 function fazerJogada(indice,jogador){
     tabuleiro[indice]=jogador;
+    
     celulas[indice].textContent=jogador;
 }
 // posiçoes de trinca no tabuleiro
@@ -80,6 +81,7 @@ function encontrarMelhorJogada(tabuleiroAtual){
         if(tabuleiroAtual[i]===""){
             tabuleiroAtual[i]=jogadorIA;
             // minmax atribui +1 e -1 para a IA percorrer o melhor caminho
+            // 0 o inicio da arvore
             let pontuacao=minmax(tabuleiroAtual,0,false);
             tabuleiroAtual[i]="";
             if(pontuacao>melhorPontuacao){
@@ -89,4 +91,43 @@ function encontrarMelhorJogada(tabuleiroAtual){
         }
     }
     return melhorJogada;
+}
+function verificarEmpate(tabuleiroAtual){
+    // se nenhuma celula esta vazia e ninguem venceu deu velha
+    return tabuleiroAtual.every(celula => celula !== "");
+}
+function minmax(tabuleiroAtual,profundidade, maximizando){
+    if(verificarVitoria(tabuleiroAtual,jogadorIA)){
+        return 10-profundidade; //pontuaçao, a ia vai usar para jogar na maior sempre
+    }
+    if(verificarVitoria(tabuleiroAtual,jogadorHumano)){
+        return profundidade-10;//vitoria do humano
+    }
+    if(verificarEmpate(tabuleiroAtual)) return 0;
+
+    // simulaçao de jogadas do humano
+    if(maximizando){
+        let melhorPontuacao=-Infinity;
+        for(let i=0; i<tabuleiroAtual.length;i++){
+            if(tabuleiroAtual[i]===''){
+                tabuleiroAtual[i]=jogadorIA;
+                // recursividade
+                let pontuacao=minmax(tabuleiroAtual,profundidade+1,false);
+                tabuleiroAtual[i]='';
+                melhorPontuacao=Math.max(pontuacao,melhorPontuacao);
+            }
+        }
+        return melhorPontuacao;
+    }else{ //minimizando
+        let melhorPontuacao=Infinity;
+        for(let i=0; i<tabuleiroAtual.length;i++){
+            if(tabuleiroAtual[i]===''){
+                tabuleiroAtual[i]=jogadorHumano;
+                let pontuacao=minmax(tabuleiroAtual,profundidade+1,true);
+                tabuleiroAtual[i]='';
+                melhorPontuacao=Math.min(pontuacao,melhorPontuacao);
+            }
+        }
+        return melhorPontuacao;
+    }
 }

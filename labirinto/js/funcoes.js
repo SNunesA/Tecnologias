@@ -80,6 +80,10 @@ function apagaVetor(){
     vetComandos=[];
     document.getElementById("comandos").innerHTML="";
 }
+function habilitarBotao(){
+    document.getElementById("incluir").disabled = false;
+    document.getElementById("executar").disabled = false;
+}
 // essa alteração deve ser aplicada apenas a parte do algoritmo que faz o percurso usando os comandos que foram fornecidos pelo usuário
 async function seguirCaminho(){
     document.getElementById("incluir").disabled = true;
@@ -124,6 +128,7 @@ async function seguirCaminho(){
             if (auxL < 0 || auxL >= l || auxC < 0 || auxC >= c) {
                 console.log("Tentou sair da tabela");
                 apagaVetor();
+                habilitarBotao();
                 return;
              }
             let celula = document.getElementById(auxL + "," + auxC);
@@ -131,6 +136,7 @@ async function seguirCaminho(){
             if(celula.querySelector('img')?.className=="obs"){
                 console.log("obstaculo");
                 apagaVetor();
+                habilitarBotao();
                 return;
             }
             linhaAtual=auxL;
@@ -145,8 +151,8 @@ async function seguirCaminho(){
         }
     }
     apagaVetor();
-    document.getElementById("incluir").disabled = false;
-    document.getElementById("executar").disabled = false;
+    habilitarBotao();
+
 }
 
 
@@ -217,11 +223,14 @@ async function vizinhanca(){
             let v=document.getElementById((y+","+x));
             // esse if serve para verificar quando o gato estiver nos cantos
             if(v){
-                let dist=Math.sqrt((x1-x)**2+(y1-y)**2);
-                // v.innerHTML+=dist;
-                if(dist<aux){
-                    aux=dist;
-                    vetAux=[x,y];
+                // fazendo o desvio dos obstáculos usando o código no qual o gato encontre o caminho sozinho
+                if(v.querySelector('img')?.className!="obs"){
+                    let dist=Math.sqrt((x1-x)**2+(y1-y)**2);
+                    // v.innerHTML+=dist;
+                    if(dist<aux){
+                        aux=dist;
+                        vetAux=[x,y];
+                    }
                 }
             }
             

@@ -5,6 +5,26 @@ canvas.width=window.innerWidth;//altura e largura do body
 canvas.height=window.innerHeight;
 corpo.appendChild(canvas);
 direcao=1;
+const teclas={};
+let destinoX=canvas.width/2;
+let destinoY=canvas.height/2;
+
+window.addEventListener("keydown", (e)=>{//apertei
+    teclas[e.key]=true;
+
+});
+window.addEventListener("keyup",(e)=>{//soltei a tecla
+    teclas[e.key]=false;
+});
+
+canvas.addEventListener('click', function(e){
+    const retanguloCanvas=canvas.getBoundingClientRect();
+    //client x é o mouse
+    destinoX=e.clientX-retanguloCanvas.left; 
+    destinoY=e.clientY-retanguloCanvas.top;
+    
+});
+
 circulo={
     x:0, //metade da tela
     y:canvas.height/2,
@@ -70,17 +90,25 @@ function loop(){
     // if(circulo.x<=0) direcao=1;
     // circulo.x+=4*direcao;
     // circulo.x+=1;//pixels
+    if(circulo.x>destinoX) circulo.x-=4*direcao;
+    if(circulo.x<destinoX) circulo.x+=4*direcao;
+    if(circulo.y>destinoY) circulo.y-=4*direcao;
+    if(circulo.y<destinoY) circulo.y+=4*direcao;
     desenhaCirculo();
-    requestAnimationFrame(loop);//ciclo de clock da maquina define a velocidade
     
     if(retangulo.x>=canvas.width-retangulo.l) direcao=1;
     retangulo.x-=4*direcao;
-   
+    
     desenhaRetangulo();
     
     // desenhaPoligono();
 
-
-
+    // faz o circulo andar com as setas
+    if(teclas["ArrowUp"]) circulo.y-=10;
+    if(teclas["ArrowDown"]) circulo.y+=10;
+    if(teclas["ArrowLeft"]) circulo.x-=10;
+    if(teclas["ArrowRight"]) circulo.x+=10;
+    requestAnimationFrame(loop);//ciclo de clock da maquina define a velocidade
+    
 }
 loop();

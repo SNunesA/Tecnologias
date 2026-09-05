@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interface Replicada</title>
+   <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<div class="main-layout">
+    <div class="pane left-pane">
+        <div class="form-container">
+            <label class="form-label">Trajetória</label>
+            <div class="controls-row">
+                <input type="text" value="" id="origem" placeholder="Origem">
+                <input type="text" value="" id="destino" placeholder="Destino">
+                <button type="submit" id="btPontos">OK</button>
+            </div>
+        </div>
+        <div class="list-box" id="list-box">
+
+        </div>
+    </div>
+    <div class="pane right-pane" id="right-pane">
+     <canvas id="canvas"></canvas>
+    </div>
+</div>
+</body>
+</html>
+<script src="funcoes.js"></script>

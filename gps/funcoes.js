@@ -1,5 +1,7 @@
 const canvas = document.getElementById("canvas");
 const pane=document.getElementById("right-pane");
+const botao = document.getElementById("btOk");
+
 
 canvas.width = 800;
 canvas.height = 600;
@@ -8,22 +10,26 @@ pane.appendChild(canvas);
 
 const raio=20;
 const cor="pink";
-const pontos=[{x:90,y:90},
-    {x:290,y:40},
-    {x:366,y:187},
-    {x:677,y:63},
-    {x:286,y:267},
-    {x:683,y:173},
-    {x:74,y:285},
-    {x:522,y:300},
-    {x:300,y:451},
-    {x:720,y:420},
+const pontos=[
+    {nome:"Veterinaria", x:90,y:90},
+    {nome:"Igreja", x:290,y:40},
+    {nome:"Escola",x:366,y:187},
+    {nome:"Banco",x:677,y:63},
+    {nome:"Mercado",x:286,y:267},
+    {nome:"Hospital",x:683,y:173},
+    {nome:"Ginasio",x:74,y:285},
+    {nome:"Prefeitura",x:522,y:300},
+    {nome:"Policia",x:300,y:451},
+    {nome:"Bombeiros",x:720,y:420},
+    
 ];
 const arestas=[
     [0,1],[1,2],[2,4],[2,7],
     [6,8],[8,7],[7,3],[7,9],[3,5],
 ];
 function criarCidade(){
+    ctx.strokeStyle="black";
+    ctx.lineWidth=1;
     arestas.forEach(linha =>{
         [o,d]=linha;//origem. destino
         let x1=pontos[o].x;
@@ -36,7 +42,7 @@ function criarCidade(){
         ctx.stroke();
         ctx.closePath();
     });
-    let txt=0;
+    
     pontos.forEach(ponto=>{
         ctx.beginPath();
         ctx.arc(ponto.x,ponto.y,raio,0,Math.PI*2);
@@ -44,8 +50,9 @@ function criarCidade(){
         ctx.fill();
         ctx.closePath();
         ctx.fillStyle="black";
-        ctx.fillText(txt,ponto.x,ponto.y);
-        txt++;
+        ctx.font="20px Arial";
+        ctx.fillText(ponto.nome,ponto.x,ponto.y+raio+20);
+ 
     });
 }
 
@@ -77,9 +84,9 @@ function buscarMenorCaminho(origem,destino){
             let passo=destino;
             // nao tem mais passos
             while(passo!==undefined){
-                caminho.unshift();//coloca na frente diferente do push que coloca no final
+                caminho.unshift(passo);//coloca na frente diferente do push que coloca no final
                 passo=caminhoAnterior[passo];
-
+                
             }
             return caminho;
         }
@@ -96,7 +103,48 @@ function buscarMenorCaminho(origem,destino){
     return null; //caminho impossivel de ser criado
 }
 
+function mostrarRota(caminho){
+    
+    let div = document.getElementById("list-box");
+    let rota=[];//esse recebe todos os atributos do vetor
+    let rotaNome=[];//esse recebe so os nomes
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.beginPath();
+    
+    ctx.lineWidth=5;
+    ctx.strokeStyle="red";
+    let i=0;
+    let dist=0;//distancia
+    let antX=0;//anterior
+    let antY=0;
+    // c é a posiçao no vetor pontos
+    caminho.forEach(c=>{
+        rota[c]=pontos[c];
+        rotaNome.push(pontos[c].nome+"<hr>");
+        console.log(rota[c]);
+        if(i===0){
+            // posiçao X E Y
+            ctx.moveTo(rota[c].x,rota[c].y);
+            i++;
+        }else{
+            ctx.lineTo(rota[c].x,rota[c].y);
+            dist=Math.sqrt((antX-rota[c].x)**2 + (antY-rota[c].y)**2);
+        }
+
+        antX=rota[c].x;
+        antY=rota[c].y;
+    });
+    ctx.stroke();//cria linha
+    ctx.closePath();
+    criarCidade();
+    div.innerHTML=rotaNome+"<hr>Distancia Total: "+Math.round(dist);
+}
 
 criarCidade();
-// gerarListaVizinhos();
-console.log(buscarMenorCaminho(0,6));
+
+botao.addEventListener("click", ()=>{
+    let origem = parseInt(document.getElementById("origem").value);
+    let destino = parseInt(document.getElementById("destino").value);
+    let c=buscarMenorCaminho(origem,destino);
+    mostrarRota(c);
+});

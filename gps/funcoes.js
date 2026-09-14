@@ -11,18 +11,19 @@ pane.appendChild(canvas);
 const raio=20;
 const cor="pink";
 const pontos=[
-    {nome:"Veterinaria", x:90,y:90},
-    {nome:"Igreja", x:290,y:40},
-    {nome:"Escola",x:366,y:187},
-    {nome:"Banco",x:677,y:63},
-    {nome:"Mercado",x:286,y:267},
-    {nome:"Hospital",x:683,y:173},
-    {nome:"Ginasio",x:74,y:285},
-    {nome:"Prefeitura",x:522,y:300},
-    {nome:"Policia",x:300,y:451},
-    {nome:"Bombeiros",x:720,y:420},
+    {nome:"Pet Shop", x:95,y:90},
+    {nome:"Cemitério", x:200,y:40},
+    {nome:"Creche",x:350,y:187},
+    {nome:"CAIXA",x:677,y:50},
+    {nome:"Atacadão",x:405,y:100},
+    {nome:"Postinho",x:683,y:300},
+    {nome:"Academia",x:90,y:285},
+    {nome:"Câmara Municipal",x:400,y:300},
+    {nome:"Delegacia",x:321,y:451},
+    {nome:"Dentista",x:620,y:400},
     
 ];
+
 const arestas=[
     [0,1],[1,2],[2,4],[2,7],
     [6,8],[8,7],[7,3],[7,9],[3,5],
@@ -42,13 +43,16 @@ function criarCidade(){
         ctx.stroke();
         ctx.closePath();
     });
-    
+    let ic=1;
     pontos.forEach(ponto=>{
-        ctx.beginPath();
-        ctx.arc(ponto.x,ponto.y,raio,0,Math.PI*2);
-        ctx.fillStyle=cor;
-        ctx.fill();
-        ctx.closePath();
+        
+        const t=45;
+        let icone=new Image();
+        // Substitua os circulos por imagens usando  ctx.drawImage
+        icone.onload = () => ctx.drawImage(icone, ponto.x-20,ponto.y-20, t,t);
+        icone.src=`icones/${ic}.png`;
+        ic++;
+        
         ctx.fillStyle="black";
         ctx.font="20px Arial";
         ctx.fillText(ponto.nome,ponto.x,ponto.y+raio+20);
@@ -148,3 +152,12 @@ botao.addEventListener("click", ()=>{
     let c=buscarMenorCaminho(origem,destino);
     mostrarRota(c);
 });
+
+//Substitua os campos text do formulário para campos select. As opções dos campos select devem ser os nomes dos ponto e devem ser dinâmicos ou seja, devem ser pegos diretamente do array
+function carregarPontos(){
+    pontos.forEach(ponto=>{
+        document.getElementById("origem").innerHTML+= `<option value="${ponto.nome}">${ponto.nome}</option>`
+        document.getElementById("destino").innerHTML+=`<option value="${ponto.nome}">${ponto.nome}</option>`
+    });
+}
+carregarPontos();

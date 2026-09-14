@@ -11,16 +11,16 @@ pane.appendChild(canvas);
 const raio=20;
 const cor="pink";
 const pontos=[
-    {nome:"Pet Shop", x:95,y:90},
-    {nome:"Cemitério", x:200,y:40},
-    {nome:"Creche",x:350,y:187},
-    {nome:"CAIXA",x:677,y:50},
-    {nome:"Atacadão",x:405,y:100},
-    {nome:"Postinho",x:683,y:300},
-    {nome:"Academia",x:90,y:285},
-    {nome:"Câmara Municipal",x:400,y:300},
-    {nome:"Delegacia",x:321,y:451},
-    {nome:"Dentista",x:620,y:400},
+    {nome:"Pet Shop", x:100,y:100},
+    {nome:"Cemitério", x:300,y:80},
+    {nome:"Creche",x:550,y:120},
+    {nome:"CAIXA",x:720,y:200},
+    {nome:"Atacadão",x:700,y:60},
+    {nome:"Postinho",x:500,y:300},
+    {nome:"Academia",x:120,y:300},
+    {nome:"Câmara Municipal",x:200,y:250},
+    {nome:"Delegacia",x:450,y:500},
+    {nome:"Dentista",x:700,y:450},
     
 ];
 

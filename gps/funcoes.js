@@ -147,8 +147,17 @@ function mostrarRota(caminho){
 criarCidade();
 
 botao.addEventListener("click", ()=>{
-    let origem = parseInt(document.getElementById("origem").value);
-    let destino = parseInt(document.getElementById("destino").value);
+    let origem = document.getElementById("origem").value;
+    let destino = document.getElementById("destino").value;
+    // pega o indice do ponto que foi passado no select
+    pontos.forEach((ponto, indice)=>{
+        if(origem===ponto.nome){
+            origem=indice;
+        }
+        if(destino===ponto.nome){
+            destino=indice;
+        }
+    });
     let c=buscarMenorCaminho(origem,destino);
     mostrarRota(c);
 });

@@ -84,7 +84,35 @@ function aplicarAlinhamento(boidAtual){
     }
 }
 
+//fazer o grupo de boids IR pro mesmo CENTRO
+const RAIO_COESAO=60;
+const FORCA_COESAO=0.005;
+function aplicarCoesao(boidAtual){
+     let somaVx=0;//padroniza a velocidade do grupo
+    let somaVy=0;
+    let totalVizinhos=0;
+    for(let i=0; i<boids.length;i++){
+        const outro=boids[i];
+        if(outro !== boidAtual){
+            const dx=boidAtual.x-outro.x;//distancia
+            const dy=boidAtual.y-outro.y;
+            const distancia=Math.sqrt(dx*dx+dy*dy);
+            if(distancia<RAIO_COESAO){
+                //esta dentro do circulo de amizade
+                somaVx+=outro.x;
+                somaVy+=outro.y;
+                totalVizinhos++;
+            }
+        }
+    }
+    if(totalVizinhos>0){
+        const centroX=somaVx/totalVizinhos;
+        const centroY=somaVy/totalVizinhos;
+        boidAtual.vx+=(centroX-boidAtual.x)*FORCA_COESAO;
+         boidAtual.vy+=(centroY-boidAtual.y)*FORCA_COESAO;
 
+    }
+}
 
 function atualizarBoids(){
     for(let i=0;i<boids.length;i++){
@@ -92,6 +120,7 @@ function atualizarBoids(){
 
         aplicarSeparacao(boid);
         aplicarAlinhamento(boid);
+        aplicarCoesao(boid);
         const velocidadeMax=4;
         const velocidadeAtual=Math.sqrt(boid.vx**2+ boid.vy**2);
         if(velocidadeAtual>velocidadeMax){

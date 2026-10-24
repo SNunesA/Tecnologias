@@ -1,0 +1,50 @@
+Nome: Fulano Silva - idade:12
+Nome: Maria Oliveira - idade: 45
+Nome: Carlos Souza - idade:28
+Nome: Ana Santos - idade:19
+Nome: Pedro Lima - idade: 60
+Nome: Lucas Ferreira - idade:33
+Nome: Juliana Costa - idade: 22
+Nome: Fernanda Pereira - idade:51
+Nome: Roberto Rodrigues - idade: 40
+Nome: Beatriz Almeida - idade:17
+Nome: Gabriel Silva - idade:29
+Nome: Amanda Oliveira - idade: 35
+Nome: Rafael Souza - idade:42
+Nome: Larissa Santos - idade: 15
+Nome: Thiago Lima - idade:26
+Nome: Camila Ferreira - idade: 38
+Nome: Bruno Costa - idade:47
+Nome: Vanessa Pereira - idade: 21
+Nome: Rodrigo Rodrigues - idade:54
+Nome: Leticia Almeida - idade: 31
+Nome: Gustavo Silva - idade:18
+Nome: Patricia Oliveira - idade: 49
+Nome: Diego Souza - idade:23
+Nome: Aline Santos - idade: 36
+Nome: Marcelo Lima - idade:58
+Nome: Daniela Ferreira - idade: 27
+Nome: Eduardo Costa - idade:41
+Nome: Renata Pereira - idade: 34
+Nome: Leonardo Rodrigues - idade:63
+Nome: Natalia Almeida - idade: 20
+Nome: Vinicius Silva - idade:25
+Nome: Bianca Oliveira - idade: 44
+Nome: Fernando Souza - idade:30
+Nome: Mariana Santos - idade: 16
+Nome: Andre Lima - idade:52
+Nome: Jessica Ferreira - idade: 24
+Nome: Guilherme Costa - idade:39
+Nome: Luana Pereira - idade: 48
+Nome: Felipe Rodrigues - idade: 32
+Nome: Carolina Almeida - idade:22
+Nome: Caio Silva - idade: 55
+Nome: Isabela Oliveira - idade:14
+Nome: Matheus Souza - idade:37
+Nome: Bruna Santos - idade: 50
+Nome: Samuel Lima - idade:28
+Nome: Gabriela Ferreira - idade: 43
+Nome: Vitor Costa - idade: 19
+Nome: Rebeca Pereira - idade:31
+Nome: Igor Rodrigues - idade: 62
+Nome: Sabrina Almeida - idade:26

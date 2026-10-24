@@ -1,0 +1,21 @@
+<?php
+$caminhoArquivo = 'pessoas.txt';
+if (!file_exists($caminhoArquivo)) {
+    die("Erro: O arquivo '{$caminhoArquivo}' não foi encontrado.");
+}
+$conteudoTxt = file_get_contents($caminhoArquivo);
+
+
+// -----------------------------------------------------------------
+// Escreva o padrão de Regex abaixo
+// -----------------------------------------------------------------
+$padrao = '/.../';
+
+if (preg_match_all($padrao, $conteudoTxt, $matches)) {
+    foreach ($matches as $pessoa) {
+        // Exiba no formato: Nome - XX anos
+        // echo ... ;
+    }
+} else {
+    echo "Nenhum registro no formato correto foi encontrado.";
+}
